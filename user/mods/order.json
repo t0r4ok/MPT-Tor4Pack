@@ -1,0 +1,16 @@
+{
+  "order": [
+    "fika-server",
+    "ServerValueModifier",
+    "zSolarint-SAIN-ServerMod",
+    "SWAG",
+    "DanW-SPTQuestingBots",
+    "tyfon-uifixes",
+    "Skwizzy-NoDiscardLimit",
+    "IhanaMies-LootValueBackend",
+    "MoreCheckmarksBackend",
+    "odt-iteminfo-4.0.3",
+    "DrakiaXYZ-LiveFleaPrices",
+    "mattdokn-fpsunlocker"
+  ]
+}

@@ -1,0 +1,11 @@
+Bot Name,Bot Nickname,Bot Difficulty,Bot Level,Assignment Status,Quest Name,Objective Name,Step Number,Start Time,End Time
+Bot33,"Zurugula",normal,9,Completed,"Путь охотника - Охранка","Zone huntsman_013","1","08:03:23","08:03:28",
+Bot33,"Zurugula",normal,9,Failed,"Посылка из прошлого","Zone case_extraction","1","08:03:33","08:03:53",
+Bot37,"Kilgor616",normal,12,Failed,"Санэпиднадзор - Часть 1","Zone pumproom","1","08:03:51","08:04:05",
+Bot37,"Kilgor616",normal,12,Completed,"Weapon Crate Outside of Forklift","Weapon Crate Outside of Forklift: Objective #1","1","08:04:10","08:04:24",
+Bot37,"Kilgor616",normal,12,Failed,"Скаут","Zone place_pacemaker_SCOUT_01","1","08:04:30","08:06:42",
+Bot37,"Kilgor616",normal,12,Completed,"Скаут","Zone place_pacemaker_SCOUT_04","1","08:05:04","08:06:18",
+Bot37,"Kilgor616",normal,12,Failed,"Скаут","Zone place_pacemaker_SCOUT_02","1","08:06:23","08:06:42",
+Bot38,"Ilhsiek",normal,56,Failed,"Crates Outside of Scav Bunker","Crates Outside of Scav Bunker: Objective #1","1","08:03:56","08:05:42",
+Bot39,"AshleyShcaefferBMW",normal,30,Failed,"3rd Floor Office Rush","3rd Floor Office Rush: Objective #2","1","08:04:01","08:06:13",
+Bot45,"Павлик Шульц (dushaoan)",normal,1,Active,"1st Floor Office","1st Floor Office: Objective #2","1","08:07:35","N/A",

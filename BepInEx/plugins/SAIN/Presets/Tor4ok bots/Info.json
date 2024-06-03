@@ -1,0 +1,10 @@
+{
+  "Name": "Tor4ok bots",
+  "Description": "Configuration for buds",
+  "Creator": "Tor4ok",
+  "SAINVersion": "2.2.3",
+  "SAINPresetVersion": "2.2.3",
+  "DateCreated": "05/21/2024 00:00:00",
+  "IsCustom": true,
+  "CanEditName": true
+}

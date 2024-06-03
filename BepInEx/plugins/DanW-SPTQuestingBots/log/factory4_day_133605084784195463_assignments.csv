@@ -1,0 +1,10 @@
+Bot Name,Bot Nickname,Bot Difficulty,Bot Level,Assignment Status,Quest Name,Objective Name,Step Number,Start Time,End Time
+Bot38,"Fiaf",normal,26,Completed,"Реагент - Часть 3","Item Шприц с реагентом","1","15:16:19","15:16:20",
+Bot38,"Fiaf",normal,26,Completed,"Spawn Rush","Spawn Rush: Objective #1","1","15:16:25","15:18:56",
+Bot38,"Fiaf",normal,26,Completed,"Скаут","Zone place_pacemaker_SCOUT_02","1","15:19:01","15:19:37",
+Bot38,"Fiaf",normal,26,Completed,"Скаут","Zone place_pacemaker_SCOUT_04","1","15:19:42","15:20:43",
+Bot38,"Fiaf",normal,26,Active,"Скаут","Zone place_pacemaker_SCOUT_01","1","15:20:48","N/A",
+Bot41,"Tron",normal,15,Completed,"Санэпиднадзор - Часть 1","Zone pumproom","1","15:16:35","15:17:45",
+Bot41,"Tron",normal,15,Pending,"Скаут","Zone place_pacemaker_SCOUT_01","1","15:17:51","N/A",
+Bot41,"Tron",normal,15,Active,"Скаут","Zone place_pacemaker_SCOUT_04","1","15:19:05","N/A",
+Bot42,"OXIdiezd",normal,18,Pending,"Садоводство - Часть 1","Zone place_SADOVOD_01_2","1","15:16:35","N/A",
