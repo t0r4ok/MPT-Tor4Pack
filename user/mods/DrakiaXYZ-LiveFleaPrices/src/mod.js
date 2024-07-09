@@ -31,10 +31,13 @@ class Mod {
     static config;
     static configPath = path.resolve(__dirname, "../config/config.json");
     static pricesPath = path.resolve(__dirname, "../config/prices.json");
+    static blacklistPath = path.resolve(__dirname, "../config/blacklist.json");
+    static blacklist;
     static originalPrices;
     async postDBLoadAsync(container) {
         Mod.container = container;
         Mod.config = JSON.parse(fs.readFileSync(Mod.configPath, "utf-8"));
+        Mod.blacklist = JSON.parse(fs.readFileSync(Mod.blacklistPath, "utf-8"));
         // Store a clone of the original prices table, so we can make sure things don't go too crazy
         const databaseServer = Mod.container.resolve("DatabaseServer");
         const priceTable = databaseServer.getTables().templates.prices;
@@ -82,7 +85,13 @@ class Mod {
         }
         // Loop through the new prices file, updating all prices present
         for (const itemId in prices) {
+            // Skip any price that doesn't exist in the item table
             if (!itemTable[itemId]) {
+                continue;
+            }
+            // Skip any item that's blacklisted
+            if (Mod.blacklist.includes(itemId)) {
+                logger.debug(`Item ${itemId} was skipped due to it being blacklisted.`);
                 continue;
             }
             let basePrice = Mod.originalPrices[itemId];
@@ -98,10 +107,8 @@ class Mod {
                 priceTable[itemId] = maxPrice;
             }
         }
-        // Update dynamic price cache. 
-        // Note: We currently cast to `any` to bypass the protected state of the generateDynamicPrices method
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-        ragfairPriceService.generateDynamicPrices();
+        // Refresh dynamic price cache.
+        ragfairPriceService.refreshDynamicPrices();
         logger.info("Flea Prices Updated!");
         return true;
     }

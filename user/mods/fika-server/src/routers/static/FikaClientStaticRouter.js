@@ -21,8 +21,17 @@ let FikaClientStaticRouter = class FikaClientStaticRouter extends Router_1.Stati
     fikaClientCallbacks;
     constructor(fikaClientCallbacks) {
         super([
-            new Router_1.RouteAction("/fika/client/config", (url, info, sessionID, _output) => {
+            new Router_1.RouteAction("/fika/client/config", async (url, info, sessionID, _output) => {
                 return this.fikaClientCallbacks.handleClientConfig(url, info, sessionID);
+            }),
+            new Router_1.RouteAction("/fika/natpunchserver/config", async (url, info, sessionID, _output) => {
+                return this.fikaClientCallbacks.handleNatPunchServerConfig(url, info, sessionID);
+            }),
+            new Router_1.RouteAction("/fika/client/check/mods", async (url, info, sessionID, _output) => {
+                return this.fikaClientCallbacks.handleCheckMods(url, info, sessionID);
+            }),
+            new Router_1.RouteAction("/fika/profile/download", async (url, info, sessionID, _output) => {
+                return this.fikaClientCallbacks.handleProfileDownload(url, info, sessionID);
             }),
         ]);
         this.fikaClientCallbacks = fikaClientCallbacks;

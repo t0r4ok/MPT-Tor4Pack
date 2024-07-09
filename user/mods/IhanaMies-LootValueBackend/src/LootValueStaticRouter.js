@@ -7,7 +7,7 @@ class Mod {
     profileHelper;
     saveServer;
     logger;
-    preAkiLoad(container) {
+    preSptLoad(container) {
         const logger = container.resolve("WinstonLogger");
         this.logger = logger;
         const staticRouterModService = container.resolve("StaticRouterModService");

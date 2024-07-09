@@ -1,19 +1,7 @@
 {
   "SelectedDefaultPreset": "none",
-  "SelectedCustomPreset": "Tor4ok bots",
+  "SelectedCustomPreset": "UnstableBots",
   "DefaultPreset": "3. Default",
   "AdvancedBotConfigs": true,
-  "ConfigScaling": 1.0,
-  "GlobalDebugMode": false,
-  "ForceBotsToRunAround": false,
-  "DebugExternal": false,
-  "DrawDebugGizmos": false,
-  "DrawDebugLabels": false,
-  "CollectBotLayerBrainInfo": false,
-  "DebugDrawProjectionPoints": false,
-  "DebugEnablePathTester": false,
-  "DebugDrawSafePaths": false,
-  "DebugSearchGizmos": false,
-  "DebugMovementPlan": false,
-  "DebugHearing": false
+  "ConfigScaling": 1.0
 }

@@ -21,7 +21,7 @@ let FikaSendItemStaticRouter = class FikaSendItemStaticRouter extends Router_1.S
     fikaSendItemCallbacks;
     constructor(fikaSendItemCallbacks) {
         super([
-            new Router_1.RouteAction("/fika/senditem/availablereceivers", (url, info, sessionID, _output) => {
+            new Router_1.RouteAction("/fika/senditem/availablereceivers", async (url, info, sessionID, _output) => {
                 return this.fikaSendItemCallbacks.handleAvailableReceivers(url, info, sessionID);
             }),
         ]);

@@ -21,7 +21,7 @@ let FikaLocationStaticRouter = class FikaLocationStaticRouter extends Router_1.S
     fikaLocationCallbacks;
     constructor(fikaLocationCallbacks) {
         super([
-            new Router_1.RouteAction("/fika/location/raids", (url, info, sessionID, _output) => {
+            new Router_1.RouteAction("/fika/location/raids", async (url, info, sessionID, _output) => {
                 return this.fikaLocationCallbacks.handleGetRaids(url, info, sessionID);
             }),
         ]);

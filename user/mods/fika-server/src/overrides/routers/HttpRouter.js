@@ -28,8 +28,8 @@ let HttpRouterOverride = class HttpRouterOverride extends Override_1.Override {
         // We need access to the full `req` object, so we need to hijack the getResponse method
         container.afterResolution("HttpRouter", (_, result) => {
             const originalGetResponse = result.getResponse;
-            result.getResponse = (req, info, sessionID) => {
-                let response = originalGetResponse.apply(result, [req, info, sessionID]);
+            result.getResponse = async (req, info, sessionID) => {
+                let response = await originalGetResponse.apply(result, [req, info, sessionID]);
                 // if the response contains host, replace host with ours
                 if (req.headers?.host) {
                     response = response.replaceAll(this.httpServerHelper.buildUrl(), req.headers.host);

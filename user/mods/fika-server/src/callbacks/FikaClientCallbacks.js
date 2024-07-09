@@ -29,6 +29,18 @@ let FikaClientCallbacks = class FikaClientCallbacks {
     handleClientConfig(_url, _info, _sessionID) {
         return this.httpResponseUtil.noBody(this.fikaClientController.handleClientConfig());
     }
+    /** Handle /fika/client/config */
+    handleNatPunchServerConfig(_url, _info, _sessionID) {
+        return this.httpResponseUtil.noBody(this.fikaClientController.handleNatPunchServerConfig());
+    }
+    /** Handle /fika/client/check/mods */
+    handleCheckMods(_url, info, _sessionID) {
+        return this.httpResponseUtil.noBody(this.fikaClientController.handleCheckMods(info));
+    }
+    /** Handle /fika/profile/download */
+    handleProfileDownload(_url, info, sessionID) {
+        return this.httpResponseUtil.noBody(this.fikaClientController.handleProfileDownload(sessionID));
+    }
 };
 exports.FikaClientCallbacks = FikaClientCallbacks;
 exports.FikaClientCallbacks = FikaClientCallbacks = __decorate([

@@ -45,6 +45,7 @@ let FikaRaidController = class FikaRaidController {
             expectedNumberOfPlayers: match.expectedNumberOfPlayers,
             gameVersion: match.gameVersion,
             fikaVersion: match.fikaVersion,
+            raidCode: match.raidCode
         };
     }
     /**
@@ -68,8 +69,9 @@ let FikaRaidController = class FikaRaidController {
             return;
         }
         return {
-            ip: match.ip,
+            ips: match.ips,
             port: match.port,
+            natPunch: match.natPunch,
         };
     }
     /**

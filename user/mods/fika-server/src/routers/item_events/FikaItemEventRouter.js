@@ -26,7 +26,7 @@ let FikaItemEventRouter = class FikaItemEventRouter extends Router_1.ItemEventRo
     getHandledRoutes() {
         return [new Router_1.HandledRoute("SendToPlayer", false)];
     }
-    handleItemEvent(url, pmcData, body, sessionID) {
+    async handleItemEvent(url, pmcData, body, sessionID) {
         switch (url) {
             case "SendToPlayer":
                 return this.fikaSendItemCallbacks.handleSendItem(pmcData, body, sessionID);

@@ -1,20 +1,11 @@
 {
   "order": [
     "fika-server",
-    "ServerValueModifier",
-    "aaa_Isaac-LootUpdate",
     "zSolarint-SAIN-ServerMod",
-    "SWAG",
-    "DanW-SPTQuestingBots",
-    "Isaac-InertiaUpdate",
-    "tyfon-uifixes",
     "Skwizzy-LootingBots-ServerMod",
+    "DrakiaXYZ-LiveFleaPrices",
     "IhanaMies-LootValueBackend",
     "MoreCheckmarksBackend",
-    "odt-iteminfo-4.0.3",
-    "DrakiaXYZ-LiveFleaPrices",
-    "mattdokn-fpsunlocker",
-    "raid_review__0.0.6",
-    "goldenheartbell-achievementspercentagelive"
+    "tyfon-uifixes"
   ]
 }

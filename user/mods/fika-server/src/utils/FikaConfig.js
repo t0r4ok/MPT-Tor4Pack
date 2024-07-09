@@ -19,25 +19,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FikaConfig = void 0;
 const node_path_1 = __importDefault(require("node:path"));
 const tsyringe_1 = require("C:/snapshot/project/node_modules/tsyringe");
-const PreAkiModLoader_1 = require("C:/snapshot/project/obj/loaders/PreAkiModLoader");
+const PreSptModLoader_1 = require("C:/snapshot/project/obj/loaders/PreSptModLoader");
 const JsonUtil_1 = require("C:/snapshot/project/obj/utils/JsonUtil");
 const VFS_1 = require("C:/snapshot/project/obj/utils/VFS");
 const package_json_1 = __importDefault(require("../../package.json"));
 let FikaConfig = class FikaConfig {
-    preAkiModLoader;
+    preSptModLoader;
     vfs;
     jsonUtil;
     modAuthor;
     modName;
     modPath;
     fikaConfig;
-    constructor(preAkiModLoader, vfs, jsonUtil) {
-        this.preAkiModLoader = preAkiModLoader;
+    constructor(preSptModLoader, vfs, jsonUtil) {
+        this.preSptModLoader = preSptModLoader;
         this.vfs = vfs;
         this.jsonUtil = jsonUtil;
         this.modAuthor = package_json_1.default.author.replace(/\W/g, "").toLowerCase();
         this.modName = package_json_1.default.name.replace(/\W/g, "").toLowerCase();
-        this.modPath = this.preAkiModLoader.getModPath(this.getModFolderName());
+        this.modPath = this.preSptModLoader.getModPath(this.getModFolderName());
         this.fikaConfig = this.jsonUtil.deserializeJsonC(this.vfs.readFile(node_path_1.default.join(this.modPath, "assets/configs/fika.jsonc")));
     }
     getConfig() {
@@ -53,9 +53,9 @@ let FikaConfig = class FikaConfig {
 exports.FikaConfig = FikaConfig;
 exports.FikaConfig = FikaConfig = __decorate([
     (0, tsyringe_1.injectable)(),
-    __param(0, (0, tsyringe_1.inject)("PreAkiModLoader")),
+    __param(0, (0, tsyringe_1.inject)("PreSptModLoader")),
     __param(1, (0, tsyringe_1.inject)("VFS")),
     __param(2, (0, tsyringe_1.inject)("JsonUtil")),
-    __metadata("design:paramtypes", [typeof (_a = typeof PreAkiModLoader_1.PreAkiModLoader !== "undefined" && PreAkiModLoader_1.PreAkiModLoader) === "function" ? _a : Object, typeof (_b = typeof VFS_1.VFS !== "undefined" && VFS_1.VFS) === "function" ? _b : Object, typeof (_c = typeof JsonUtil_1.JsonUtil !== "undefined" && JsonUtil_1.JsonUtil) === "function" ? _c : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof PreSptModLoader_1.PreSptModLoader !== "undefined" && PreSptModLoader_1.PreSptModLoader) === "function" ? _a : Object, typeof (_b = typeof VFS_1.VFS !== "undefined" && VFS_1.VFS) === "function" ? _b : Object, typeof (_c = typeof JsonUtil_1.JsonUtil !== "undefined" && JsonUtil_1.JsonUtil) === "function" ? _c : Object])
 ], FikaConfig);
 //# sourceMappingURL=FikaConfig.js.map

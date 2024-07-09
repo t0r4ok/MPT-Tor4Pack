@@ -48,7 +48,7 @@ let FikaUpdateController = class FikaUpdateController {
      * @param request
      */
     handleSethost(request) {
-        this.fikaMatchService.setMatchHost(request.serverId, request.ip, request.port);
+        this.fikaMatchService.setMatchHost(request.serverId, request.ips, request.port, request.natPunch);
     }
     /**
      * Handle /fika/update/setstatus

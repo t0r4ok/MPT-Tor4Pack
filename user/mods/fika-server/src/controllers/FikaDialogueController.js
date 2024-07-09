@@ -11,28 +11,39 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c;
+var _a, _b, _c, _d;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FikaDialogueController = void 0;
 const tsyringe_1 = require("C:/snapshot/project/node_modules/tsyringe");
 const ProfileHelper_1 = require("C:/snapshot/project/obj/helpers/ProfileHelper");
 const BackendErrorCodes_1 = require("C:/snapshot/project/obj/models/enums/BackendErrorCodes");
+const ConfigTypes_1 = require("C:/snapshot/project/obj/models/enums/ConfigTypes");
+const ConfigServer_1 = require("C:/snapshot/project/obj/servers/ConfigServer");
 const FikaFriendRequestsHelper_1 = require("../helpers/FikaFriendRequestsHelper");
 const FikaPlayerRelationsHelper_1 = require("../helpers/FikaPlayerRelationsHelper");
 let FikaDialogueController = class FikaDialogueController {
     dialogueChatBots;
     profileHelper;
+    configServer;
     fikaFriendRequestsHelper;
     fikaPlayerRelationsHelper;
-    constructor(dialogueChatBots, profileHelper, fikaFriendRequestsHelper, fikaPlayerRelationsHelper) {
+    constructor(dialogueChatBots, profileHelper, configServer, fikaFriendRequestsHelper, fikaPlayerRelationsHelper) {
         this.dialogueChatBots = dialogueChatBots;
         this.profileHelper = profileHelper;
+        this.configServer = configServer;
         this.fikaFriendRequestsHelper = fikaFriendRequestsHelper;
         this.fikaPlayerRelationsHelper = fikaPlayerRelationsHelper;
         // empty
     }
     getFriendList(sessionID) {
-        const botsAndFriends = this.dialogueChatBots.map((v) => v.getChatBot());
+        const core = this.configServer.getConfig(ConfigTypes_1.ConfigTypes.CORE);
+        let botsAndFriends = this.dialogueChatBots.map((v) => v.getChatBot());
+        if (!core.features.chatbotFeatures.commandoEnabled) {
+            botsAndFriends = botsAndFriends.filter(u => u._id != "sptCommando");
+        }
+        if (!core.features.chatbotFeatures.sptFriendEnabled) {
+            botsAndFriends = botsAndFriends.filter(u => u._id != "sptFriend");
+        }
         const friendsIds = this.fikaPlayerRelationsHelper.getFriendsList(sessionID);
         for (const friendId of friendsIds) {
             const profile = this.profileHelper.getPmcProfile(friendId);
@@ -126,8 +137,9 @@ exports.FikaDialogueController = FikaDialogueController = __decorate([
     (0, tsyringe_1.injectable)(),
     __param(0, (0, tsyringe_1.injectAll)("DialogueChatBot")),
     __param(1, (0, tsyringe_1.inject)("ProfileHelper")),
-    __param(2, (0, tsyringe_1.inject)("FikaFriendRequestsHelper")),
-    __param(3, (0, tsyringe_1.inject)("FikaPlayerRelationsHelper")),
-    __metadata("design:paramtypes", [Array, typeof (_a = typeof ProfileHelper_1.ProfileHelper !== "undefined" && ProfileHelper_1.ProfileHelper) === "function" ? _a : Object, typeof (_b = typeof FikaFriendRequestsHelper_1.FikaFriendRequestsHelper !== "undefined" && FikaFriendRequestsHelper_1.FikaFriendRequestsHelper) === "function" ? _b : Object, typeof (_c = typeof FikaPlayerRelationsHelper_1.FikaPlayerRelationsHelper !== "undefined" && FikaPlayerRelationsHelper_1.FikaPlayerRelationsHelper) === "function" ? _c : Object])
+    __param(2, (0, tsyringe_1.inject)("ConfigServer")),
+    __param(3, (0, tsyringe_1.inject)("FikaFriendRequestsHelper")),
+    __param(4, (0, tsyringe_1.inject)("FikaPlayerRelationsHelper")),
+    __metadata("design:paramtypes", [Array, typeof (_a = typeof ProfileHelper_1.ProfileHelper !== "undefined" && ProfileHelper_1.ProfileHelper) === "function" ? _a : Object, typeof (_b = typeof ConfigServer_1.ConfigServer !== "undefined" && ConfigServer_1.ConfigServer) === "function" ? _b : Object, typeof (_c = typeof FikaFriendRequestsHelper_1.FikaFriendRequestsHelper !== "undefined" && FikaFriendRequestsHelper_1.FikaFriendRequestsHelper) === "function" ? _c : Object, typeof (_d = typeof FikaPlayerRelationsHelper_1.FikaPlayerRelationsHelper !== "undefined" && FikaPlayerRelationsHelper_1.FikaPlayerRelationsHelper) === "function" ? _d : Object])
 ], FikaDialogueController);
 //# sourceMappingURL=FikaDialogueController.js.map

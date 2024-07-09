@@ -21,22 +21,22 @@ let FikaRaidStaticRouter = class FikaRaidStaticRouter extends Router_1.StaticRou
     fikaRaidCallbacks;
     constructor(fikaRaidCallbacks) {
         super([
-            new Router_1.RouteAction("/fika/raid/create", (url, info, sessionID, _output) => {
+            new Router_1.RouteAction("/fika/raid/create", async (url, info, sessionID, _output) => {
                 return this.fikaRaidCallbacks.handleRaidCreate(url, info, sessionID);
             }),
-            new Router_1.RouteAction("/fika/raid/join", (url, info, sessionID, _output) => {
+            new Router_1.RouteAction("/fika/raid/join", async (url, info, sessionID, _output) => {
                 return this.fikaRaidCallbacks.handleRaidJoin(url, info, sessionID);
             }),
-            new Router_1.RouteAction("/fika/raid/leave", (url, info, sessionID, _output) => {
+            new Router_1.RouteAction("/fika/raid/leave", async (url, info, sessionID, _output) => {
                 return this.fikaRaidCallbacks.handleRaidLeave(url, info, sessionID);
             }),
-            new Router_1.RouteAction("/fika/raid/gethost", (url, info, sessionID, _output) => {
+            new Router_1.RouteAction("/fika/raid/gethost", async (url, info, sessionID, _output) => {
                 return this.fikaRaidCallbacks.handleRaidGethost(url, info, sessionID);
             }),
-            new Router_1.RouteAction("/fika/raid/spawnpoint", (url, info, sessionID, _output) => {
+            new Router_1.RouteAction("/fika/raid/spawnpoint", async (url, info, sessionID, _output) => {
                 return this.fikaRaidCallbacks.handleRaidSpawnpoint(url, info, sessionID);
             }),
-            new Router_1.RouteAction("/fika/raid/getsettings", (url, info, sessionID, _output) => {
+            new Router_1.RouteAction("/fika/raid/getsettings", async (url, info, sessionID, _output) => {
                 return this.fikaRaidCallbacks.handleRaidGetSettings(url, info, sessionID);
             }),
         ]);

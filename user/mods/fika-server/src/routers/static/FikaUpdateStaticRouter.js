@@ -21,19 +21,19 @@ let FikaUpdateStaticRouter = class FikaUpdateStaticRouter extends Router_1.Stati
     fikaUpdateCallbacks;
     constructor(fikaUpdateCallbacks) {
         super([
-            new Router_1.RouteAction("/fika/update/ping", (url, info, sessionID, _output) => {
+            new Router_1.RouteAction("/fika/update/ping", async (url, info, sessionID, _output) => {
                 return this.fikaUpdateCallbacks.handlePing(url, info, sessionID);
             }),
-            new Router_1.RouteAction("/fika/update/spawnpoint", (url, info, sessionID, _output) => {
+            new Router_1.RouteAction("/fika/update/spawnpoint", async (url, info, sessionID, _output) => {
                 return this.fikaUpdateCallbacks.handleSpawnpoint(url, info, sessionID);
             }),
-            new Router_1.RouteAction("/fika/update/playerspawn", (url, info, sessionID, _output) => {
+            new Router_1.RouteAction("/fika/update/playerspawn", async (url, info, sessionID, _output) => {
                 return this.fikaUpdateCallbacks.handlePlayerspawn(url, info, sessionID);
             }),
-            new Router_1.RouteAction("/fika/update/sethost", (url, info, sessionID, _output) => {
+            new Router_1.RouteAction("/fika/update/sethost", async (url, info, sessionID, _output) => {
                 return this.fikaUpdateCallbacks.handleSethost(url, info, sessionID);
             }),
-            new Router_1.RouteAction("/fika/update/setstatus", (url, info, sessionID, _output) => {
+            new Router_1.RouteAction("/fika/update/setstatus", async (url, info, sessionID, _output) => {
                 return this.fikaUpdateCallbacks.handleSetStatus(url, info, sessionID);
             }),
         ]);
