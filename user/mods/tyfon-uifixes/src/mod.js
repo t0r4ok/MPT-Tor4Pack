@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const RagfairLinkedSlotItemService_1 = require("./RagfairLinkedSlotItemService");
 const config_json_1 = __importDefault(require("../config/config.json"));
 class UIFixes {
     databaseService;
@@ -79,6 +80,9 @@ class UIFixes {
                 };
             }, { frequency: "Always" });
         }
+        // Register slot-aware linked item service
+        container.register("RagfairLinkedSlotItemService", RagfairLinkedSlotItemService_1.RagfairLinkedSlotItemService);
+        container.register("RagfairLinkedItemService", { useToken: "RagfairLinkedSlotItemService" });
         staticRouterModService.registerStaticRouter("UIFixesRoutes", [
             {
                 url: "/uifixes/assortUnlocks",
