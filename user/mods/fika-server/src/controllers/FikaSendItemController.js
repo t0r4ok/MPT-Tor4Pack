@@ -76,16 +76,7 @@ let FikaSendItemController = class FikaSendItemController {
                 item.upd.SpawnedInSession = false;
             }
         }
-        this.mailSendService.sendUserMessageToPlayer(body.target, {
-            _id: senderProfile.info.id,
-            aid: senderProfile.info.aid,
-            Info: {
-                Nickname: senderProfile.info.username,
-                Side: senderProfile.characters.pmc.Info.Side,
-                Level: senderProfile.characters.pmc.Info.Level,
-                MemberCategory: senderProfile.characters.pmc.Info.MemberCategory,
-            },
-        }, `You have received a gift from ${senderProfile.info.username}`, itemsToSend);
+        this.mailSendService.sendSystemMessageToPlayer(body.target, `You have received a gift from ${senderProfile?.characters?.pmc?.Info?.Nickname ?? "unknown"}`, itemsToSend);
         this.inventoryHelper.removeItem(senderProfile.characters.pmc, body.id, sessionID, output);
         return output;
     }
