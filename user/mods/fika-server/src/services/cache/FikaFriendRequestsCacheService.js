@@ -15,25 +15,25 @@ var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FikaFriendRequestsCacheService = void 0;
 const tsyringe_1 = require("C:/snapshot/project/node_modules/tsyringe");
+const FileSystemSync_1 = require("C:/snapshot/project/obj/utils/FileSystemSync");
 const JsonUtil_1 = require("C:/snapshot/project/obj/utils/JsonUtil");
-const VFS_1 = require("C:/snapshot/project/obj/utils/VFS");
 const FikaConfig_1 = require("../../utils/FikaConfig");
 let FikaFriendRequestsCacheService = class FikaFriendRequestsCacheService {
     jsonUtil;
-    vfs;
+    fileSystemSync;
     fikaConfig;
     friendRequests;
     friendRequestsFullPath;
     friendRequestsPath = "cache/friendRequests.json";
-    constructor(jsonUtil, vfs, fikaConfig) {
+    constructor(jsonUtil, fileSystemSync, fikaConfig) {
         this.jsonUtil = jsonUtil;
-        this.vfs = vfs;
+        this.fileSystemSync = fileSystemSync;
         this.fikaConfig = fikaConfig;
         this.friendRequestsFullPath = `./${this.fikaConfig.getModPath()}${this.friendRequestsPath}`;
-        if (!this.vfs.exists(this.friendRequestsFullPath)) {
-            this.vfs.writeFile(this.friendRequestsFullPath, "[]");
+        if (!this.fileSystemSync.exists(this.friendRequestsFullPath)) {
+            this.fileSystemSync.write(this.friendRequestsFullPath, "[]");
         }
-        this.friendRequests = this.jsonUtil.deserialize(this.vfs.readFile(this.friendRequestsFullPath), this.friendRequestsFullPath);
+        this.friendRequests = this.jsonUtil.deserialize(this.fileSystemSync.read(this.friendRequestsFullPath), this.friendRequestsFullPath);
     }
     getAllFriendRequests() {
         return this.friendRequests;
@@ -53,19 +53,19 @@ let FikaFriendRequestsCacheService = class FikaFriendRequestsCacheService {
             return;
         }
         this.friendRequests.splice(index, 1);
-        this.vfs.writeFile(this.friendRequestsFullPath, this.jsonUtil.serialize(this.friendRequests));
+        this.fileSystemSync.write(this.friendRequestsFullPath, this.jsonUtil.serialize(this.friendRequests));
     }
     storeFriendRequest(value) {
         this.friendRequests.push(value);
-        this.vfs.writeFile(this.friendRequestsFullPath, this.jsonUtil.serialize(this.friendRequests));
+        this.fileSystemSync.write(this.friendRequestsFullPath, this.jsonUtil.serialize(this.friendRequests));
     }
 };
 exports.FikaFriendRequestsCacheService = FikaFriendRequestsCacheService;
 exports.FikaFriendRequestsCacheService = FikaFriendRequestsCacheService = __decorate([
     (0, tsyringe_1.injectable)(),
     __param(0, (0, tsyringe_1.inject)("JsonUtil")),
-    __param(1, (0, tsyringe_1.inject)("VFS")),
+    __param(1, (0, tsyringe_1.inject)("FileSystemSync")),
     __param(2, (0, tsyringe_1.inject)("FikaConfig")),
-    __metadata("design:paramtypes", [typeof (_a = typeof JsonUtil_1.JsonUtil !== "undefined" && JsonUtil_1.JsonUtil) === "function" ? _a : Object, typeof (_b = typeof VFS_1.VFS !== "undefined" && VFS_1.VFS) === "function" ? _b : Object, typeof (_c = typeof FikaConfig_1.FikaConfig !== "undefined" && FikaConfig_1.FikaConfig) === "function" ? _c : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof JsonUtil_1.JsonUtil !== "undefined" && JsonUtil_1.JsonUtil) === "function" ? _a : Object, typeof (_b = typeof FileSystemSync_1.FileSystemSync !== "undefined" && FileSystemSync_1.FileSystemSync) === "function" ? _b : Object, typeof (_c = typeof FikaConfig_1.FikaConfig !== "undefined" && FikaConfig_1.FikaConfig) === "function" ? _c : Object])
 ], FikaFriendRequestsCacheService);
 //# sourceMappingURL=FikaFriendRequestsCacheService.js.map

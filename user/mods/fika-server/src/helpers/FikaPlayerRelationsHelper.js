@@ -11,14 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d;
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FikaPlayerRelationsHelper = void 0;
 const tsyringe_1 = require("C:/snapshot/project/node_modules/tsyringe");
-const FikaPlayerRelationsCacheService_1 = require("../services/cache/FikaPlayerRelationsCacheService");
 const SaveServer_1 = require("C:/snapshot/project/obj/servers/SaveServer");
 const SptWebSocketConnectionHandler_1 = require("C:/snapshot/project/obj/servers/ws/SptWebSocketConnectionHandler");
-const ILogger_1 = require("C:/snapshot/project/obj/models/spt/utils/ILogger");
+const FikaPlayerRelationsCacheService_1 = require("../services/cache/FikaPlayerRelationsCacheService");
 let FikaPlayerRelationsHelper = class FikaPlayerRelationsHelper {
     fikaPlayerRelationsCacheService;
     saveServer;
@@ -91,7 +90,7 @@ let FikaPlayerRelationsHelper = class FikaPlayerRelationsHelper {
         }
         this.logger.info(`removeFriend: ${fromProfileId}->${toProfileId}`);
         const profile = this.saveServer.getProfile(fromProfileId);
-        this.webSocketHandler.sendMessage(toProfileId, {
+        this.webSocketHandler.sendMessageAsync(toProfileId, {
             type: "youAreRemovedFromFriendList",
             eventId: "youAreRemovedFromFriendList",
             profile: {
@@ -104,9 +103,9 @@ let FikaPlayerRelationsHelper = class FikaPlayerRelationsHelper {
                     MemberCategory: profile.characters.pmc.Info.MemberCategory,
                     SelectedMemberCategory: profile.characters.pmc.Info.MemberCategory,
                     Ignored: false,
-                    Banned: profile.characters.pmc.Info.BannedState
-                }
-            }
+                    Banned: profile.characters.pmc.Info.BannedState,
+                },
+            },
         });
     }
     /**
@@ -122,7 +121,7 @@ let FikaPlayerRelationsHelper = class FikaPlayerRelationsHelper {
         playerRelations.Ignore.push(toProfileId);
         this.fikaPlayerRelationsCacheService.storeValue(fromProfileId, playerRelations);
         let profile = this.saveServer.getProfile(fromProfileId);
-        this.webSocketHandler.sendMessage(toProfileId, {
+        this.webSocketHandler.sendMessageAsync(toProfileId, {
             type: "youAreAddToIgnoreList",
             eventId: "youAreAddToIgnoreList",
             _id: fromProfileId,
@@ -136,9 +135,9 @@ let FikaPlayerRelationsHelper = class FikaPlayerRelationsHelper {
                     MemberCategory: profile.characters.pmc.Info.MemberCategory,
                     SelectedMemberCategory: profile.characters.pmc.Info.MemberCategory,
                     Ignored: false,
-                    Banned: profile.characters.pmc.Info.BannedState
-                }
-            }
+                    Banned: profile.characters.pmc.Info.BannedState,
+                },
+            },
         });
     }
     /**
@@ -154,7 +153,7 @@ let FikaPlayerRelationsHelper = class FikaPlayerRelationsHelper {
         playerRelations.Ignore.splice(playerRelations.Ignore.indexOf(toProfileId), 1);
         this.fikaPlayerRelationsCacheService.storeValue(fromProfileId, playerRelations);
         let profile = this.saveServer.getProfile(fromProfileId);
-        this.webSocketHandler.sendMessage(toProfileId, {
+        this.webSocketHandler.sendMessageAsync(toProfileId, {
             type: "youAreRemoveFromIgnoreList",
             eventId: "youAreRemoveFromIgnoreList",
             _id: fromProfileId,
@@ -168,9 +167,9 @@ let FikaPlayerRelationsHelper = class FikaPlayerRelationsHelper {
                     MemberCategory: profile.characters.pmc.Info.MemberCategory,
                     SelectedMemberCategory: profile.characters.pmc.Info.MemberCategory,
                     Ignored: false,
-                    Banned: profile.characters.pmc.Info.BannedState
-                }
-            }
+                    Banned: profile.characters.pmc.Info.BannedState,
+                },
+            },
         });
     }
 };
@@ -181,6 +180,6 @@ exports.FikaPlayerRelationsHelper = FikaPlayerRelationsHelper = __decorate([
     __param(1, (0, tsyringe_1.inject)("SaveServer")),
     __param(2, (0, tsyringe_1.inject)("SptWebSocketConnectionHandler")),
     __param(3, (0, tsyringe_1.inject)("WinstonLogger")),
-    __metadata("design:paramtypes", [typeof (_a = typeof FikaPlayerRelationsCacheService_1.FikaPlayerRelationsCacheService !== "undefined" && FikaPlayerRelationsCacheService_1.FikaPlayerRelationsCacheService) === "function" ? _a : Object, typeof (_b = typeof SaveServer_1.SaveServer !== "undefined" && SaveServer_1.SaveServer) === "function" ? _b : Object, typeof (_c = typeof SptWebSocketConnectionHandler_1.SptWebSocketConnectionHandler !== "undefined" && SptWebSocketConnectionHandler_1.SptWebSocketConnectionHandler) === "function" ? _c : Object, typeof (_d = typeof ILogger_1.ILogger !== "undefined" && ILogger_1.ILogger) === "function" ? _d : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof FikaPlayerRelationsCacheService_1.FikaPlayerRelationsCacheService !== "undefined" && FikaPlayerRelationsCacheService_1.FikaPlayerRelationsCacheService) === "function" ? _a : Object, typeof (_b = typeof SaveServer_1.SaveServer !== "undefined" && SaveServer_1.SaveServer) === "function" ? _b : Object, typeof (_c = typeof SptWebSocketConnectionHandler_1.SptWebSocketConnectionHandler !== "undefined" && SptWebSocketConnectionHandler_1.SptWebSocketConnectionHandler) === "function" ? _c : Object, Object])
 ], FikaPlayerRelationsHelper);
 //# sourceMappingURL=FikaPlayerRelationsHelper.js.map

@@ -1,1 +1,10 @@
-{"version":3,"file":"IFikaConfigClient.js","sourceRoot":"","sources":["IFikaConfigClient.ts"],"names":[],"mappings":""}
+{
+    "version": 3,
+    "file": "IFikaConfigClient.js",
+    "sourceRoot": "",
+    "sources": [
+        "IFikaConfigClient.ts"
+    ],
+    "names": [],
+    "mappings": ""
+}

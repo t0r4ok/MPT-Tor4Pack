@@ -2,7 +2,7 @@
 
 [![Discord](https://img.shields.io/discord/1202292159366037545?style=plastic&logo=discord&logoColor=FFFFFF&label=Fika%20Discord
 )](https://discord.gg/project-fika)
-[![Downloads](https://img.shields.io/github/downloads/project-fika/Fika-Server/latest/total?style=plastic&logo=github)](https://github.com/project-fika/Fika-Server/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/project-fika/Fika-Server/total?style=plastic&logo=github)](https://github.com/project-fika/Fika-Server/releases/latest)
 ![Size](https://img.shields.io/github/languages/code-size/project-fika/Fika-Server?style=plastic&logo=github)
 ![Issues](https://img.shields.io/github/issues/project-fika/Fika-Server?style=plastic&logo=github)
 [![License](https://img.shields.io/badge/CC--BY--NC--SA--4.0-blue?style=plastic&logo=creativecommons&logoColor=FFFFFF&label=License)](LICENSE)
@@ -11,7 +11,7 @@ Server-side changes to make multiplayer work.
 
 ## Requirements
 
-- [Node 20.x](https://nodejs.org/en/download)
+- [Node 22.x](https://nodejs.org/en/download)
 
 ## Build
 

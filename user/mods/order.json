@@ -1,16 +1,3 @@
 {
-  "order": [
-    "Virtual's Custom Quest Loader",
-    "fika-server",
-    "zSolarint-SAIN-ServerMod",
-    "SWAG",
-    "acidphantasm-refsptfriendlyquests",
-    "Skwizzy-LootingBots-ServerMod",
-    "DrakiaXYZ-LiveFleaPrices",
-    "IhanaMies-LootValueBackend",
-    "MoreCheckmarksBackend",
-    "tyfon-uifixes",
-    "goldenheartbell-achievementspercentagelive",
-    "zPreyToLive-CustomLauncherBackgrounds"
-  ]
+    "order": []
 }

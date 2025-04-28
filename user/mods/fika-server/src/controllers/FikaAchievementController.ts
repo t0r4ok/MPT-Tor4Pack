@@ -8,11 +8,11 @@ import { DatabaseService } from "@spt/services/DatabaseService";
 export class FikaAchievementController {
     constructor(
         @inject("SaveServer") protected saveServer: SaveServer,
-        @inject("DatabaseService") protected databaseService: DatabaseService
+        @inject("DatabaseService") protected databaseService: DatabaseService,
     ) {
         // empty
     }
-    getAchievementStatistics(sessionID: string): ICompletedAchievementsResponse {
+    public getAchievementStatistics(_sessionID: string): ICompletedAchievementsResponse {
         const achievements = this.databaseService.getAchievements();
         const stats: Record<string, number> = {};
 
@@ -20,16 +20,19 @@ export class FikaAchievementController {
 
         for (const achievement of achievements) {
             let percentage = 0;
-            for (const profile of profiles)
-            {
-                if (!(profile.characters?.pmc?.Achievements)) {
+            for (const profile of profiles) {
+                if (profile.info?.password === "fika-headless") {
                     continue;
                 }
-                
+
+                if (!profile.characters?.pmc?.Achievements) {
+                    continue;
+                }
+
                 if (!(achievement.id in profile.characters.pmc.Achievements)) {
                     continue;
                 }
-                
+
                 percentage++;
             }
 

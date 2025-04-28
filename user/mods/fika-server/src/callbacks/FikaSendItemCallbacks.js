@@ -25,8 +25,8 @@ let FikaSendItemCallbacks = class FikaSendItemCallbacks {
         this.fikaSendItemController = fikaSendItemController;
         // empty
     }
-    handleSendItem(pmcData, body, sessionID) {
-        return this.fikaSendItemController.sendItem(pmcData, body, sessionID);
+    async handleSendItem(pmcData, body, sessionID) {
+        return await this.fikaSendItemController.sendItem(pmcData, body, sessionID);
     }
     /** Handle /fika/senditem/availablereceivers */
     handleAvailableReceivers(_url, _info, sessionID) {

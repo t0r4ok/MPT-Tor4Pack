@@ -14,41 +14,49 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var _a, _b, _c;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FikaServerTools = void 0;
-const ILogger_1 = require("C:/snapshot/project/obj/models/spt/utils/ILogger");
+const child_process_1 = require("child_process");
+const fs_1 = __importDefault(require("fs"));
+const node_path_1 = __importDefault(require("node:path"));
+const os_1 = __importDefault(require("os"));
+const ConfigTypes_1 = require("C:/snapshot/project/obj/models/enums/ConfigTypes");
+const ConfigServer_1 = require("C:/snapshot/project/obj/servers/ConfigServer");
 const tsyringe_1 = require("C:/snapshot/project/node_modules/tsyringe");
 const FikaConfig_1 = require("./FikaConfig");
-const ConfigServer_1 = require("C:/snapshot/project/obj/servers/ConfigServer");
-const ConfigTypes_1 = require("C:/snapshot/project/obj/models/enums/ConfigTypes");
-const child_process_1 = require("child_process");
-const node_path_1 = __importDefault(require("node:path"));
-const fs_1 = __importDefault(require("fs"));
 let FikaServerTools = class FikaServerTools {
     logger;
     fikaConfig;
     configServer;
     name = "FikaServerTools";
     exePath;
-    natPunchServerConfig;
     httpConfig;
     processes = {};
     constructor(logger, fikaConfig, configServer) {
         this.logger = logger;
         this.fikaConfig = fikaConfig;
         this.configServer = configServer;
-        this.exePath = node_path_1.default.join(node_path_1.default.join(__dirname, "../../"), "FikaServerTools.exe");
-        this.natPunchServerConfig = fikaConfig.getConfig().natPunchServer;
+        switch (os_1.default.platform()) {
+            case "linux": {
+                this.exePath = node_path_1.default.join(node_path_1.default.join(__dirname, "../../"), "FikaServerTools");
+                break;
+            }
+            default: {
+                this.exePath = node_path_1.default.join(node_path_1.default.join(__dirname, "../../"), "FikaServerTools.exe");
+                break;
+            }
+        }
         this.httpConfig = this.configServer.getConfig(ConfigTypes_1.ConfigTypes.HTTP);
     }
     startService(serviceName) {
         var exeArgs;
+        const natPunchServerConfig = this.fikaConfig.getConfig().natPunchServer;
         switch (serviceName) {
             case "NatPunchServer":
                 const ip = this.httpConfig.ip;
-                const port = this.natPunchServerConfig.port;
-                const natIntroduceAmount = this.natPunchServerConfig.natIntroduceAmount;
+                const port = natPunchServerConfig.port;
+                const natIntroduceAmount = natPunchServerConfig.natIntroduceAmount;
                 exeArgs = `-NatPunchServer -IP ${ip} -Port ${port} -NatIntroduceAmount ${natIntroduceAmount}`.split(" ");
                 break;
             default:
@@ -63,17 +71,17 @@ let FikaServerTools = class FikaServerTools {
             this.stopService(serviceName);
         }
         const process = (0, child_process_1.spawn)(this.exePath, exeArgs);
-        process.stdout.on("data", data => {
+        process.stdout.on("data", (data) => {
             var dataStr = data.toString();
             dataStr = dataStr.substring(0, dataStr.length - 1);
             this.logInfo(serviceName, dataStr);
         });
-        process.stderr.on("data", data => {
+        process.stderr.on("data", (data) => {
             var dataStr = data.toString();
             dataStr = dataStr.substring(0, dataStr.length - 1);
             this.logError(serviceName, dataStr);
         });
-        process.on("exit", code => {
+        process.on("exit", (code) => {
             this.logError(this.name, `FikaServerTools ended with code ${code}`);
         });
         this.processes[serviceName] = process;
@@ -102,6 +110,6 @@ exports.FikaServerTools = FikaServerTools = __decorate([
     __param(0, (0, tsyringe_1.inject)("WinstonLogger")),
     __param(1, (0, tsyringe_1.inject)("FikaConfig")),
     __param(2, (0, tsyringe_1.inject)("ConfigServer")),
-    __metadata("design:paramtypes", [typeof (_a = typeof ILogger_1.ILogger !== "undefined" && ILogger_1.ILogger) === "function" ? _a : Object, typeof (_b = typeof FikaConfig_1.FikaConfig !== "undefined" && FikaConfig_1.FikaConfig) === "function" ? _b : Object, typeof (_c = typeof ConfigServer_1.ConfigServer !== "undefined" && ConfigServer_1.ConfigServer) === "function" ? _c : Object])
+    __metadata("design:paramtypes", [Object, typeof (_a = typeof FikaConfig_1.FikaConfig !== "undefined" && FikaConfig_1.FikaConfig) === "function" ? _a : Object, typeof (_b = typeof ConfigServer_1.ConfigServer !== "undefined" && ConfigServer_1.ConfigServer) === "function" ? _b : Object])
 ], FikaServerTools);
 //# sourceMappingURL=FikaServerTools.js.map

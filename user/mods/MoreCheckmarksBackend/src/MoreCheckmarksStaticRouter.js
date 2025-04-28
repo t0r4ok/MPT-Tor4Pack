@@ -4,7 +4,7 @@ const ConfigTypes_1 = require("C:/snapshot/project/obj/models/enums/ConfigTypes"
 const Traders_1 = require("C:/snapshot/project/obj/models/enums/Traders");
 class Mod {
     questConfig;
-    preSptLoad(container) {
+    async preSptLoad(container) {
         const logger = container.resolve("WinstonLogger");
         const dynamicRouterModService = container.resolve("DynamicRouterModService");
         const staticRouterModService = container.resolve("StaticRouterModService");
@@ -20,7 +20,7 @@ class Mod {
         staticRouterModService.registerStaticRouter("MoreCheckmarksRoutes", [
             {
                 url: "/MoreCheckmarksRoutes/quests",
-                action: (url, info, sessionID, output) => {
+                action: async (url, info, sessionID, output) => {
                     logger.info("MoreCheckmarks making quest data request");
                     const quests = [];
                     const allQuests = questHelper.getQuestsFromDb();
@@ -61,7 +61,7 @@ class Mod {
             },
             {
                 url: "/MoreCheckmarksRoutes/assorts",
-                action: (url, info, sessionID, output) => {
+                action: async (url, info, sessionID, output) => {
                     logger.info("MoreCheckmarks making trader assort data request");
                     const assorts = [];
                     if (databaseServer && databaseServer.getTables()) {
@@ -84,7 +84,7 @@ class Mod {
             },
             {
                 url: "/MoreCheckmarksRoutes/items",
-                action: (url, info, sessionID, output) => {
+                action: async (url, info, sessionID, output) => {
                     logger.info("MoreCheckmarks making item data request");
                     const items = {};
                     if (databaseServer && databaseServer.getTables() && databaseServer.getTables().templates && databaseServer.getTables().templates.items) {
@@ -97,8 +97,9 @@ class Mod {
             },
             {
                 url: "/MoreCheckmarksRoutes/locales",
-                action: (url, info, sessionID, output) => {
+                action: async (url, info, sessionID, output) => {
                     logger.info("MoreCheckmarks making locale request");
+                    // @ts-ignore
                     const locales = {};
                     if (databaseServer && databaseServer.getTables() && databaseServer.getTables().locales) {
                         return JSON.stringify(databaseServer.getTables().locales);
@@ -110,8 +111,9 @@ class Mod {
             },
             {
                 url: "/MoreCheckmarksRoutes/productions",
-                action: (url, info, sessionID, output) => {
+                action: async (url, info, sessionID, output) => {
                     logger.info("MoreCheckmarks making productions request");
+                    // @ts-ignore
                     const production = {};
                     if (databaseServer && databaseServer.getTables() && databaseServer.getTables().hideout && databaseServer.getTables().hideout.production) {
                         return JSON.stringify(databaseServer.getTables().hideout.production);

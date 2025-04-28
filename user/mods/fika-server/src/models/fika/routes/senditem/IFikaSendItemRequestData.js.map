@@ -1,1 +1,10 @@
-{"version":3,"file":"IFikaSendItemRequestData.js","sourceRoot":"","sources":["IFikaSendItemRequestData.ts"],"names":[],"mappings":""}
+{
+    "version": 3,
+    "file": "IFikaSendItemRequestData.js",
+    "sourceRoot": "",
+    "sources": [
+        "IFikaSendItemRequestData.ts"
+    ],
+    "names": [],
+    "mappings": ""
+}

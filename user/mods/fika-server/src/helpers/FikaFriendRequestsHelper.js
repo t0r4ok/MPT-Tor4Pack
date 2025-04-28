@@ -11,16 +11,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d, _e;
+var _a, _b, _c, _d;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FikaFriendRequestsHelper = void 0;
 const tsyringe_1 = require("C:/snapshot/project/node_modules/tsyringe");
 const HashUtil_1 = require("C:/snapshot/project/obj/utils/HashUtil");
-const FikaFriendRequestsCacheService_1 = require("../services/cache/FikaFriendRequestsCacheService");
+const LogTextColor_1 = require("C:/snapshot/project/obj/models/spt/logging/LogTextColor");
 const SaveServer_1 = require("C:/snapshot/project/obj/servers/SaveServer");
 const SptWebSocketConnectionHandler_1 = require("C:/snapshot/project/obj/servers/ws/SptWebSocketConnectionHandler");
-const ILogger_1 = require("C:/snapshot/project/obj/models/spt/utils/ILogger");
-const LogTextColor_1 = require("C:/snapshot/project/obj/models/spt/logging/LogTextColor");
+const FikaFriendRequestsCacheService_1 = require("../services/cache/FikaFriendRequestsCacheService");
 let FikaFriendRequestsHelper = class FikaFriendRequestsHelper {
     hashUtil;
     fikaFriendRequestsCacheService;
@@ -61,6 +60,10 @@ let FikaFriendRequestsHelper = class FikaFriendRequestsHelper {
             this.logger.logWithColor(`Friend request ${fromProfileId}->${toProfileId} already exists`, LogTextColor_1.LogTextColor.YELLOW);
             return;
         }
+        if (!this.saveServer.profileExists(toProfileId)) {
+            this.logger.logWithColor(`Friend request: ${toProfileId} doesn't exist! ${fromProfileId} tried to add an invalid user!`, LogTextColor_1.LogTextColor.YELLOW);
+            return;
+        }
         this.fikaFriendRequestsCacheService.storeFriendRequest({
             _id: this.hashUtil.generate(),
             from: fromProfileId,
@@ -70,7 +73,7 @@ let FikaFriendRequestsHelper = class FikaFriendRequestsHelper {
         let profile = this.saveServer.getProfile(fromProfileId);
         if (profile) {
             this.logger.logWithColor(`Sending WebSocket message to ${toProfileId}`, LogTextColor_1.LogTextColor.GREEN);
-            this.webSocketHandler.sendMessage(toProfileId, {
+            this.webSocketHandler.sendMessageAsync(toProfileId, {
                 type: "friendListNewRequest",
                 eventId: "friendListNewRequest",
                 _id: fromProfileId,
@@ -84,9 +87,9 @@ let FikaFriendRequestsHelper = class FikaFriendRequestsHelper {
                         MemberCategory: profile.characters.pmc.Info.MemberCategory,
                         SelectedMemberCategory: profile.characters.pmc.Info.MemberCategory,
                         Ignored: false,
-                        Banned: profile.characters.pmc.Info.BannedState
-                    }
-                }
+                        Banned: profile.characters.pmc.Info.BannedState,
+                    },
+                },
             });
         }
         else {
@@ -108,7 +111,7 @@ let FikaFriendRequestsHelper = class FikaFriendRequestsHelper {
         switch (reason) {
             case "accept": {
                 const profile = this.saveServer.getProfile(toProfileId);
-                this.webSocketHandler.sendMessage(fromProfileId, {
+                this.webSocketHandler.sendMessageAsync(fromProfileId, {
                     type: "friendListRequestAccept",
                     eventId: "friendListRequestAccept",
                     profile: {
@@ -121,15 +124,15 @@ let FikaFriendRequestsHelper = class FikaFriendRequestsHelper {
                             MemberCategory: profile.characters.pmc.Info.MemberCategory,
                             SelectedMemberCategory: profile.characters.pmc.Info.MemberCategory,
                             Ignored: false,
-                            Banned: profile.characters.pmc.Info.BannedState
-                        }
-                    }
+                            Banned: profile.characters.pmc.Info.BannedState,
+                        },
+                    },
                 });
                 break;
             }
             case "cancel": {
                 const profile = this.saveServer.getProfile(fromProfileId);
-                this.webSocketHandler.sendMessage(toProfileId, {
+                this.webSocketHandler.sendMessageAsync(toProfileId, {
                     type: "friendListRequestCancel",
                     eventId: "friendListRequestCancel",
                     profile: {
@@ -142,15 +145,15 @@ let FikaFriendRequestsHelper = class FikaFriendRequestsHelper {
                             MemberCategory: profile.characters.pmc.Info.MemberCategory,
                             SelectedMemberCategory: profile.characters.pmc.Info.MemberCategory,
                             Ignored: false,
-                            Banned: profile.characters.pmc.Info.BannedState
-                        }
-                    }
+                            Banned: profile.characters.pmc.Info.BannedState,
+                        },
+                    },
                 });
                 break;
             }
             case "decline": {
                 const profile = this.saveServer.getProfile(toProfileId);
-                this.webSocketHandler.sendMessage(fromProfileId, {
+                this.webSocketHandler.sendMessageAsync(fromProfileId, {
                     type: "friendListRequestDecline",
                     eventId: "friendListRequestDecline",
                     profile: {
@@ -163,9 +166,9 @@ let FikaFriendRequestsHelper = class FikaFriendRequestsHelper {
                             MemberCategory: profile.characters.pmc.Info.MemberCategory,
                             SelectedMemberCategory: profile.characters.pmc.Info.MemberCategory,
                             Ignored: false,
-                            Banned: profile.characters.pmc.Info.BannedState
-                        }
-                    }
+                            Banned: profile.characters.pmc.Info.BannedState,
+                        },
+                    },
                 });
                 break;
             }
@@ -180,6 +183,6 @@ exports.FikaFriendRequestsHelper = FikaFriendRequestsHelper = __decorate([
     __param(2, (0, tsyringe_1.inject)("SaveServer")),
     __param(3, (0, tsyringe_1.inject)("SptWebSocketConnectionHandler")),
     __param(4, (0, tsyringe_1.inject)("WinstonLogger")),
-    __metadata("design:paramtypes", [typeof (_a = typeof HashUtil_1.HashUtil !== "undefined" && HashUtil_1.HashUtil) === "function" ? _a : Object, typeof (_b = typeof FikaFriendRequestsCacheService_1.FikaFriendRequestsCacheService !== "undefined" && FikaFriendRequestsCacheService_1.FikaFriendRequestsCacheService) === "function" ? _b : Object, typeof (_c = typeof SaveServer_1.SaveServer !== "undefined" && SaveServer_1.SaveServer) === "function" ? _c : Object, typeof (_d = typeof SptWebSocketConnectionHandler_1.SptWebSocketConnectionHandler !== "undefined" && SptWebSocketConnectionHandler_1.SptWebSocketConnectionHandler) === "function" ? _d : Object, typeof (_e = typeof ILogger_1.ILogger !== "undefined" && ILogger_1.ILogger) === "function" ? _e : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof HashUtil_1.HashUtil !== "undefined" && HashUtil_1.HashUtil) === "function" ? _a : Object, typeof (_b = typeof FikaFriendRequestsCacheService_1.FikaFriendRequestsCacheService !== "undefined" && FikaFriendRequestsCacheService_1.FikaFriendRequestsCacheService) === "function" ? _b : Object, typeof (_c = typeof SaveServer_1.SaveServer !== "undefined" && SaveServer_1.SaveServer) === "function" ? _c : Object, typeof (_d = typeof SptWebSocketConnectionHandler_1.SptWebSocketConnectionHandler !== "undefined" && SptWebSocketConnectionHandler_1.SptWebSocketConnectionHandler) === "function" ? _d : Object, Object])
 ], FikaFriendRequestsHelper);
 //# sourceMappingURL=FikaFriendRequestsHelper.js.map

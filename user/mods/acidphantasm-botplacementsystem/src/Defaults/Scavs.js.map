@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "file": "Scavs.js",
+    "sourceRoot": "",
+    "sources": [
+        "Scavs.ts"
+    ],
+    "names": [],
+    "mappings": ";;;AAAA,2FAAwF;AAE3E,QAAA,QAAQ,GACrB;IACI,WAAW,EAAE,MAAM;IACnB,SAAS,EAAE,QAAQ;IACnB,WAAW,EAAE;QACT,KAAK;KACR;IACD,aAAa,EAAE,WAAW;IAC1B,eAAe,EAAE,6BAAa,CAAC,OAAO;IACtC,WAAW,EAAE,KAAK;IAClB,QAAQ,EAAE,CAAC;IACX,WAAW,EAAE,CAAC;IACd,WAAW,EAAE,CAAC;IACd,UAAU,EAAE,CAAC,CAAC;IACd,UAAU,EAAE,CAAC,CAAC;CACjB,CAAA"
+}
