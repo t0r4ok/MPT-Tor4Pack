@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "file": "GlobalUtils.js",
+    "sourceRoot": "",
+    "sources": [
+        "GlobalUtils.ts"
+    ],
+    "names": [],
+    "mappings": ";;AAIA,wDAGC;AAPD,iGAA8F;AAI9F,SAAgB,sBAAsB,CAAI,iBAAsB,EAAE,UAAsB,EAAE,MAAe;IAErG,OAAO,IAAI,mCAAgB,CAAI,iBAAiB,EAAE,UAAU,EAAE,MAAM,CAAC,CAAC;AAC1E,CAAC"
+}

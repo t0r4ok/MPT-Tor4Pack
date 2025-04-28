@@ -3,9 +3,9 @@ import { DependencyContainer, inject, injectable } from "tsyringe";
 import { DialogueController } from "@spt/controllers/DialogueController";
 import { IGetFriendListDataResponse } from "@spt/models/eft/dialog/IGetFriendListDataResponse";
 
+import { ISendMessageRequest } from "@spt/models/eft/dialog/ISendMessageRequest";
 import { FikaDialogueController } from "../../controllers/FikaDialogueController";
 import { Override } from "../../di/Override";
-import { ISendMessageRequest } from "@spt/models/eft/dialog/ISendMessageRequest";
 
 @injectable()
 export class DialogueControllerOverride extends Override {
@@ -23,7 +23,7 @@ export class DialogueControllerOverride extends Override {
 
                 result.sendMessage = (sessionId: string, request: ISendMessageRequest): string => {
                     return this.fikaDialogueController.sendMessage(sessionId, request);
-                }
+                };
             },
             { frequency: "Always" },
         );

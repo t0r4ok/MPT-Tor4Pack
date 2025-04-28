@@ -17,6 +17,7 @@ exports.FikaUpdateCallbacks = void 0;
 const tsyringe_1 = require("C:/snapshot/project/node_modules/tsyringe");
 const HttpResponseUtil_1 = require("C:/snapshot/project/obj/utils/HttpResponseUtil");
 const FikaUpdateController_1 = require("../controllers/FikaUpdateController");
+const EFikaMatchStatus_1 = require("../models/enums/EFikaMatchStatus");
 let FikaUpdateCallbacks = class FikaUpdateCallbacks {
     httpResponseUtil;
     fikaUpdateController;
@@ -30,11 +31,6 @@ let FikaUpdateCallbacks = class FikaUpdateCallbacks {
         this.fikaUpdateController.handlePing(info);
         return this.httpResponseUtil.nullResponse();
     }
-    /** Handle /fika/update/spawnpoint */
-    handleSpawnpoint(_url, info, _sessionID) {
-        this.fikaUpdateController.handleSpawnpoint(info);
-        return this.httpResponseUtil.nullResponse();
-    }
     /** Handle /fika/update/playerspawn */
     handlePlayerspawn(_url, info, _sessionID) {
         this.fikaUpdateController.handlePlayerspawn(info);
@@ -46,8 +42,22 @@ let FikaUpdateCallbacks = class FikaUpdateCallbacks {
         return this.httpResponseUtil.nullResponse();
     }
     /** Handle /fika/update/setstatus */
-    handleSetStatus(_url, info, _sessionID) {
-        this.fikaUpdateController.handleSetStatus(info);
+    async handleSetStatus(_url, info, _sessionID) {
+        // Handle conversion of Enum so it can be properly used.
+        if (Object.keys(EFikaMatchStatus_1.EFikaMatchStatus).includes(info.status.toString())) {
+            info.status = EFikaMatchStatus_1.EFikaMatchStatus[info.status.toString()];
+        }
+        await this.fikaUpdateController.handleSetStatus(info);
+        return this.httpResponseUtil.nullResponse();
+    }
+    /** Handle /fika/update/addplayer */
+    handleRaidAddPlayer(_url, info, _sessionID) {
+        this.fikaUpdateController.handleRaidAddPlayer(info);
+        return this.httpResponseUtil.nullResponse();
+    }
+    /** Handle /fika/update/playerdied */
+    handlePlayerDied(_url, info, _sessionID) {
+        this.fikaUpdateController.handleRaidPlayerDied(info);
         return this.httpResponseUtil.nullResponse();
     }
 };

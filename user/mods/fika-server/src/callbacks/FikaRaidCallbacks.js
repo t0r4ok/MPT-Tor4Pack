@@ -39,16 +39,21 @@ let FikaRaidCallbacks = class FikaRaidCallbacks {
         return this.httpResponseUtil.nullResponse();
     }
     /** Handle /fika/raid/gethost */
-    handleRaidGethost(_url, info, _sessionID) {
-        return this.httpResponseUtil.noBody(this.fikaRaidController.handleRaidGethost(info));
-    }
-    /** Handle /fika/raid/spawnpoint */
-    handleRaidSpawnpoint(_url, info, _sessionID) {
-        return this.httpResponseUtil.noBody(this.fikaRaidController.handleRaidSpawnpoint(info));
+    handleRaidGetHost(_url, info, _sessionID) {
+        return this.httpResponseUtil.noBody(this.fikaRaidController.handleRaidGetHost(info));
     }
     /** Handle /fika/raid/getsettings */
     handleRaidGetSettings(_url, info, _sessionID) {
         return this.httpResponseUtil.noBody(this.fikaRaidController.handleRaidGetSettings(info));
+    }
+    /** Handle /fika/raid/headless/start */
+    async handleRaidStartHeadless(_url, info, sessionID) {
+        return this.httpResponseUtil.noBody(await this.fikaRaidController.handleRaidStartHeadless(sessionID, info));
+    }
+    /** Handle /fika/raid/registerPlayer */
+    handleRaidRegisterPlayer(_url, info, sessionID) {
+        this.fikaRaidController.handleRaidRegisterPlayer(sessionID, info);
+        return this.httpResponseUtil.nullResponse();
     }
 };
 exports.FikaRaidCallbacks = FikaRaidCallbacks;

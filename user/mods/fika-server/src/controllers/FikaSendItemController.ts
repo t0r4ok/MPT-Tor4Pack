@@ -3,18 +3,22 @@ import { inject, injectable } from "tsyringe";
 import { InventoryHelper } from "@spt/helpers/InventoryHelper";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { IPmcData } from "@spt/models/eft/common/IPmcData";
-import { Item } from "@spt/models/eft/common/tables/IItem";
+import { IItem } from "@spt/models/eft/common/tables/IItem";
 import { IItemEventRouterResponse } from "@spt/models/eft/itemEvent/IItemEventRouterResponse";
 import { ISptProfile } from "@spt/models/eft/profile/ISptProfile";
-import { ILogger } from "@spt/models/spt/utils/ILogger";
+import type { ILogger } from "@spt/models/spt/utils/ILogger";
 import { EventOutputHolder } from "@spt/routers/EventOutputHolder";
 import { SaveServer } from "@spt/servers/SaveServer";
+import { DatabaseService } from "@spt/services/DatabaseService";
 import { MailSendService } from "@spt/services/MailSendService";
 import { HttpResponseUtil } from "@spt/utils/HttpResponseUtil";
 
+import { EFikaNotifications } from "../models/enums/EFikaNotifications";
 import { IFikaSendItemRequestData } from "../models/fika/routes/senditem/IFikaSendItemRequestData";
 import { IFikaSenditemAvailablereceiversResponse } from "../models/fika/routes/senditem/availablereceivers/IFikaSenditemAvailablereceiversResponse";
+import { IReceivedSentItemNotification } from "../models/fika/websocket/notifications/IReceivedSentItemNotification";
 import { FikaConfig } from "../utils/FikaConfig";
+import { FikaNotificationWebSocket } from "../websockets/FikaNotificationWebSocket";
 
 @injectable()
 export class FikaSendItemController {
@@ -27,11 +31,12 @@ export class FikaSendItemController {
         @inject("ItemHelper") protected itemHelper: ItemHelper,
         @inject("HttpResponseUtil") protected httpResponse: HttpResponseUtil,
         @inject("FikaConfig") protected fikaConfig: FikaConfig,
+        @inject("FikaNotificationWebSocket") protected fikaNotificationWebSocket: FikaNotificationWebSocket,
     ) {
         // empty
     }
 
-    public sendItem(_pmcData: IPmcData, body: IFikaSendItemRequestData, sessionID: string): IItemEventRouterResponse {
+    public async sendItem(_pmcData: IPmcData, body: IFikaSendItemRequestData, sessionID: string): Promise<IItemEventRouterResponse> {
         const fikaConfig = this.fikaConfig.getConfig();
         const output = this.eventOutputHolder.getOutput(sessionID);
 
@@ -60,13 +65,13 @@ export class FikaSendItemController {
 
         this.logger.info(`${body.id} is going to sessionID: ${body.target}`);
 
-        const senderItems: Item[] = senderProfile.characters.pmc.Inventory.items;
-        const itemsToSend: Item[] = this.itemHelper.findAndReturnChildrenAsItems(senderItems, body.id);
+        const senderItems: IItem[] = senderProfile.characters.pmc.Inventory.items;
+        const itemsToSend: IItem[] = this.itemHelper.findAndReturnChildrenAsItems(senderItems, body.id);
         if (!itemsToSend || itemsToSend.length === 0) {
             return this.httpResponse.appendErrorToOutput(output, "Item not found in inventory");
         }
 
-        if (fikaConfig.server.giftedItemsLoseFIR) {
+        if (fikaConfig.server.sentItemsLoseFIR) {
             for (const item of itemsToSend) {
                 item.upd ??= {};
 
@@ -74,13 +79,18 @@ export class FikaSendItemController {
             }
         }
 
-        this.mailSendService.sendSystemMessageToPlayer(
-            body.target,
-            `You have received a gift from ${senderProfile?.characters?.pmc?.Info?.Nickname ?? "unknown"}`,
-            itemsToSend
-        );
+        this.mailSendService.sendSystemMessageToPlayer(body.target, `You have received a gift from ${senderProfile?.characters?.pmc?.Info?.Nickname ?? "unknown"}`, itemsToSend, 604800);
 
         this.inventoryHelper.removeItem(senderProfile.characters.pmc, body.id, sessionID, output);
+
+        const notification: IReceivedSentItemNotification = {
+            type: EFikaNotifications.SentItem,
+            nickname: senderProfile?.characters?.pmc?.Info?.Nickname,
+            targetId: body.target,
+            itemName: `${itemsToSend[0]._tpl} ShortName`,
+        };
+
+        await this.fikaNotificationWebSocket.sendAsync(body.target, notification);
 
         return output;
     }
@@ -100,9 +110,14 @@ export class FikaSendItemController {
         const profiles = this.saveServer.getProfiles();
 
         for (const profile of Object.values(profiles)) {
-            const username = profile.info.username;
-            if (!(username in result) && username !== sender.info.username) {
-                result[username] = profile.info.id;
+            //Uninitialized profiles can cause this to error out, skip these.
+            if (!profile.characters?.pmc?.Info) continue;
+
+            if (profile.info.password === "fika-headless") continue;
+
+            const nickname = profile.characters.pmc.Info.Nickname;
+            if (!(nickname in result) && nickname !== sender.characters.pmc.Info.Nickname) {
+                result[nickname] = profile.info.id;
             }
         }
 

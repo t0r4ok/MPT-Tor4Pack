@@ -17,12 +17,13 @@ exports.FikaSendItemController = void 0;
 const tsyringe_1 = require("C:/snapshot/project/node_modules/tsyringe");
 const InventoryHelper_1 = require("C:/snapshot/project/obj/helpers/InventoryHelper");
 const ItemHelper_1 = require("C:/snapshot/project/obj/helpers/ItemHelper");
-const ILogger_1 = require("C:/snapshot/project/obj/models/spt/utils/ILogger");
 const EventOutputHolder_1 = require("C:/snapshot/project/obj/routers/EventOutputHolder");
 const SaveServer_1 = require("C:/snapshot/project/obj/servers/SaveServer");
 const MailSendService_1 = require("C:/snapshot/project/obj/services/MailSendService");
 const HttpResponseUtil_1 = require("C:/snapshot/project/obj/utils/HttpResponseUtil");
+const EFikaNotifications_1 = require("../models/enums/EFikaNotifications");
 const FikaConfig_1 = require("../utils/FikaConfig");
+const FikaNotificationWebSocket_1 = require("../websockets/FikaNotificationWebSocket");
 let FikaSendItemController = class FikaSendItemController {
     logger;
     eventOutputHolder;
@@ -32,7 +33,8 @@ let FikaSendItemController = class FikaSendItemController {
     itemHelper;
     httpResponse;
     fikaConfig;
-    constructor(logger, eventOutputHolder, mailSendService, inventoryHelper, saveServer, itemHelper, httpResponse, fikaConfig) {
+    fikaNotificationWebSocket;
+    constructor(logger, eventOutputHolder, mailSendService, inventoryHelper, saveServer, itemHelper, httpResponse, fikaConfig, fikaNotificationWebSocket) {
         this.logger = logger;
         this.eventOutputHolder = eventOutputHolder;
         this.mailSendService = mailSendService;
@@ -41,9 +43,10 @@ let FikaSendItemController = class FikaSendItemController {
         this.itemHelper = itemHelper;
         this.httpResponse = httpResponse;
         this.fikaConfig = fikaConfig;
+        this.fikaNotificationWebSocket = fikaNotificationWebSocket;
         // empty
     }
-    sendItem(_pmcData, body, sessionID) {
+    async sendItem(_pmcData, body, sessionID) {
         const fikaConfig = this.fikaConfig.getConfig();
         const output = this.eventOutputHolder.getOutput(sessionID);
         if (!body || !body.id || !body.target) {
@@ -70,14 +73,21 @@ let FikaSendItemController = class FikaSendItemController {
         if (!itemsToSend || itemsToSend.length === 0) {
             return this.httpResponse.appendErrorToOutput(output, "Item not found in inventory");
         }
-        if (fikaConfig.server.giftedItemsLoseFIR) {
+        if (fikaConfig.server.sentItemsLoseFIR) {
             for (const item of itemsToSend) {
                 item.upd ??= {};
                 item.upd.SpawnedInSession = false;
             }
         }
-        this.mailSendService.sendSystemMessageToPlayer(body.target, `You have received a gift from ${senderProfile?.characters?.pmc?.Info?.Nickname ?? "unknown"}`, itemsToSend);
+        this.mailSendService.sendSystemMessageToPlayer(body.target, `You have received a gift from ${senderProfile?.characters?.pmc?.Info?.Nickname ?? "unknown"}`, itemsToSend, 604800);
         this.inventoryHelper.removeItem(senderProfile.characters.pmc, body.id, sessionID, output);
+        const notification = {
+            type: EFikaNotifications_1.EFikaNotifications.SentItem,
+            nickname: senderProfile?.characters?.pmc?.Info?.Nickname,
+            targetId: body.target,
+            itemName: `${itemsToSend[0]._tpl} ShortName`,
+        };
+        await this.fikaNotificationWebSocket.sendAsync(body.target, notification);
         return output;
     }
     /**
@@ -93,9 +103,14 @@ let FikaSendItemController = class FikaSendItemController {
         const result = {};
         const profiles = this.saveServer.getProfiles();
         for (const profile of Object.values(profiles)) {
-            const username = profile.info.username;
-            if (!(username in result) && username !== sender.info.username) {
-                result[username] = profile.info.id;
+            //Uninitialized profiles can cause this to error out, skip these.
+            if (!profile.characters?.pmc?.Info)
+                continue;
+            if (profile.info.password === "fika-headless")
+                continue;
+            const nickname = profile.characters.pmc.Info.Nickname;
+            if (!(nickname in result) && nickname !== sender.characters.pmc.Info.Nickname) {
+                result[nickname] = profile.info.id;
             }
         }
         return result;
@@ -112,6 +127,7 @@ exports.FikaSendItemController = FikaSendItemController = __decorate([
     __param(5, (0, tsyringe_1.inject)("ItemHelper")),
     __param(6, (0, tsyringe_1.inject)("HttpResponseUtil")),
     __param(7, (0, tsyringe_1.inject)("FikaConfig")),
-    __metadata("design:paramtypes", [typeof (_a = typeof ILogger_1.ILogger !== "undefined" && ILogger_1.ILogger) === "function" ? _a : Object, typeof (_b = typeof EventOutputHolder_1.EventOutputHolder !== "undefined" && EventOutputHolder_1.EventOutputHolder) === "function" ? _b : Object, typeof (_c = typeof MailSendService_1.MailSendService !== "undefined" && MailSendService_1.MailSendService) === "function" ? _c : Object, typeof (_d = typeof InventoryHelper_1.InventoryHelper !== "undefined" && InventoryHelper_1.InventoryHelper) === "function" ? _d : Object, typeof (_e = typeof SaveServer_1.SaveServer !== "undefined" && SaveServer_1.SaveServer) === "function" ? _e : Object, typeof (_f = typeof ItemHelper_1.ItemHelper !== "undefined" && ItemHelper_1.ItemHelper) === "function" ? _f : Object, typeof (_g = typeof HttpResponseUtil_1.HttpResponseUtil !== "undefined" && HttpResponseUtil_1.HttpResponseUtil) === "function" ? _g : Object, typeof (_h = typeof FikaConfig_1.FikaConfig !== "undefined" && FikaConfig_1.FikaConfig) === "function" ? _h : Object])
+    __param(8, (0, tsyringe_1.inject)("FikaNotificationWebSocket")),
+    __metadata("design:paramtypes", [Object, typeof (_a = typeof EventOutputHolder_1.EventOutputHolder !== "undefined" && EventOutputHolder_1.EventOutputHolder) === "function" ? _a : Object, typeof (_b = typeof MailSendService_1.MailSendService !== "undefined" && MailSendService_1.MailSendService) === "function" ? _b : Object, typeof (_c = typeof InventoryHelper_1.InventoryHelper !== "undefined" && InventoryHelper_1.InventoryHelper) === "function" ? _c : Object, typeof (_d = typeof SaveServer_1.SaveServer !== "undefined" && SaveServer_1.SaveServer) === "function" ? _d : Object, typeof (_e = typeof ItemHelper_1.ItemHelper !== "undefined" && ItemHelper_1.ItemHelper) === "function" ? _e : Object, typeof (_f = typeof HttpResponseUtil_1.HttpResponseUtil !== "undefined" && HttpResponseUtil_1.HttpResponseUtil) === "function" ? _f : Object, typeof (_g = typeof FikaConfig_1.FikaConfig !== "undefined" && FikaConfig_1.FikaConfig) === "function" ? _g : Object, typeof (_h = typeof FikaNotificationWebSocket_1.FikaNotificationWebSocket !== "undefined" && FikaNotificationWebSocket_1.FikaNotificationWebSocket) === "function" ? _h : Object])
 ], FikaSendItemController);
 //# sourceMappingURL=FikaSendItemController.js.map

@@ -39,6 +39,8 @@ let ProfileControllerOverride = class ProfileControllerOverride extends Override
                 const profiles = this.profileHelper.getProfiles();
                 const matches = [];
                 for (const profile of Object.values(profiles)) {
+                    if (profile.info?.password === "fika-headless")
+                        continue;
                     if (profile.characters?.pmc?.Info) {
                         if (profile.characters.pmc.Info.Nickname.toLowerCase().startsWith(searchNicknameLowerCase)) {
                             matches.push({
@@ -49,65 +51,13 @@ let ProfileControllerOverride = class ProfileControllerOverride extends Override
                                     Side: profile.characters.pmc.Info.Side,
                                     Level: profile.characters.pmc.Info.Level,
                                     MemberCategory: profile.characters.pmc.Info.MemberCategory,
+                                    SelectedMemberCategory: profile.characters.pmc.Info.SelectedMemberCategory,
                                 },
                             });
                         }
                     }
                 }
                 return matches;
-            };
-            result.getOtherProfile = (sessionId, request) => {
-                const profiles = this.profileHelper.getProfiles();
-                // default to player profile
-                let profileId = sessionId;
-                for (const profile of Object.values(profiles)) {
-                    if (profile.characters.pmc.aid === Number(request.accountId)) {
-                        profileId = profile.characters.pmc._id;
-                        break;
-                    }
-                }
-                const player = this.profileHelper.getFullProfile(profileId);
-                const playerPmc = player.characters.pmc;
-                const playerScav = player.characters.scav;
-                return {
-                    id: playerPmc._id,
-                    aid: playerPmc.aid,
-                    info: {
-                        nickname: playerPmc.Info.Nickname,
-                        side: playerPmc.Info.Side,
-                        experience: playerPmc.Info.Experience,
-                        memberCategory: playerPmc.Info.MemberCategory,
-                        bannedState: playerPmc.Info.BannedState,
-                        bannedUntil: playerPmc.Info.BannedUntil,
-                        registrationDate: playerPmc.Info.RegistrationDate,
-                    },
-                    customization: {
-                        head: playerPmc.Customization.Head,
-                        body: playerPmc.Customization.Body,
-                        feet: playerPmc.Customization.Feet,
-                        hands: playerPmc.Customization.Hands,
-                    },
-                    skills: playerPmc.Skills,
-                    equipment: {
-                        // Default inventory tpl
-                        Id: playerPmc.Inventory.items.find((x) => x._tpl === "55d7217a4bdc2d86028b456d")._id,
-                        Items: playerPmc.Inventory.items,
-                    },
-                    achievements: playerPmc.Achievements,
-                    favoriteItems: playerPmc.Inventory.favoriteItems ?? [],
-                    pmcStats: {
-                        eft: {
-                            totalInGameTime: playerPmc.Stats.Eft.TotalInGameTime,
-                            overAllCounters: playerPmc.Stats.Eft.OverallCounters,
-                        },
-                    },
-                    scavStats: {
-                        eft: {
-                            totalInGameTime: playerScav.Stats.Eft.TotalInGameTime,
-                            overAllCounters: playerScav.Stats.Eft.OverallCounters,
-                        },
-                    },
-                };
             };
         }, { frequency: "Always" });
     }

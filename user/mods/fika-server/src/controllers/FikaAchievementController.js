@@ -25,14 +25,17 @@ let FikaAchievementController = class FikaAchievementController {
         this.databaseService = databaseService;
         // empty
     }
-    getAchievementStatistics(sessionID) {
+    getAchievementStatistics(_sessionID) {
         const achievements = this.databaseService.getAchievements();
         const stats = {};
         const profiles = Object.values(this.saveServer.getProfiles());
         for (const achievement of achievements) {
             let percentage = 0;
             for (const profile of profiles) {
-                if (!(profile.characters?.pmc?.Achievements)) {
+                if (profile.info?.password === "fika-headless") {
+                    continue;
+                }
+                if (!profile.characters?.pmc?.Achievements) {
                     continue;
                 }
                 if (!(achievement.id in profile.characters.pmc.Achievements)) {

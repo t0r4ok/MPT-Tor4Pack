@@ -33,6 +33,9 @@ let FikaClientStaticRouter = class FikaClientStaticRouter extends Router_1.Stati
             new Router_1.RouteAction("/fika/profile/download", async (url, info, sessionID, _output) => {
                 return this.fikaClientCallbacks.handleProfileDownload(url, info, sessionID);
             }),
+            new Router_1.RouteAction("/fika/client/check/version", async (url, info, sessionID, _output) => {
+                return this.fikaClientCallbacks.handleVersionCheck(url, info, sessionID);
+            }),
         ]);
         this.fikaClientCallbacks = fikaClientCallbacks;
     }

@@ -17,7 +17,10 @@ exports.HttpRouterOverride = void 0;
 const tsyringe_1 = require("C:/snapshot/project/node_modules/tsyringe");
 const HttpServerHelper_1 = require("C:/snapshot/project/obj/helpers/HttpServerHelper");
 const Override_1 = require("../../di/Override");
-// Thanks to DrakiaXYZ for this implementation
+/**
+ * This override is essential for setups where the backendIp or NAT port mapping differs from the SPT server’s backend port.
+ * Without it, SPT constructs an incorrect backend URL, causing connection issues (e.g., using 0.0.0.0 instead of the correct address).
+ */
 let HttpRouterOverride = class HttpRouterOverride extends Override_1.Override {
     httpServerHelper;
     constructor(httpServerHelper) {

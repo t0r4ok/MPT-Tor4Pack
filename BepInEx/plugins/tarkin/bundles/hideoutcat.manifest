@@ -1,0 +1,46 @@
+ManifestFileVersion: 0
+CRC: 1018226052
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 3b4f1efd816306755099433f1e337cc8
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: e422a73b4511c0e6dd16f04435cec9ce
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 3b4f1efd816306755099433f1e337cc8
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 90
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Cats/hideoutcat/Material/SimpleUV/MAINTEX_BLACK.png
+- Assets/Cats/hideoutcat/Material/SimpleUV/MAINTEX_BROWN.png
+- Assets/Cats/hideoutcat/Material/SimpleUV/MAINTEX_GREY.png
+- Assets/Cats/hideoutcat/Material/SimpleUV/MAINTEX_WHITE.png
+- Assets/Cats/hideoutcat/Material/SimpleUV/MAINTEX_BICOLOR.png
+- Assets/Cats/hideoutcat/Material/SimpleUV/MAINTEX_ORANGE.png
+- Assets/Cats/hideoutcat/hideoutcat.prefab
+Dependencies: []
